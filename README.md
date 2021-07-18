@@ -6,6 +6,10 @@ This is where all of my experimental additions and trials will be uploaded as I 
 ---IMPORTANT--- 
 this file: https://cloud.unitoo.it/s/47SriNEL2kiajXT should be placed at: Replikant/models/pytorch-16BIT-model_v5 (it is too heavy and isn't open source to put in git)
 
+If you already have this from a previous installation, you do NOT need to download it again, but rather copy the model to the "models" folder of Experimetnal Edition!
+
+This model is only a placeholder for now, I will be uploading an experimental version of my own model, GPT-R, in a few days/weeks depending on how things go. Bear in mind that GPT-R, as of writing, is NOT stable and NOT ready for mainline release. 
+
 # For Linux (64 bit only):
 
 First, you will need to install the following packages:
@@ -46,8 +50,7 @@ Download Python 3.7.8 via this link: https://www.python.org/downloads/release/py
 
 You're going to want to grab the "Windows x86-64 executable installer"
 
-Once downloaded, run the exe. Do just a standard installation. When complete, it may say something about enabling a 
-256-character path limit or something to that effect. I would suggest enabling it, but I don't think it matters. 
+Once downloaded, run the exe. Do just a standard installation. When complete, it may say something about enabling a 256-character path limit or something to that effect. I would suggest enabling it, but I don't think it matters. 
 
 After this, reopen the exe installer, and click "modify". 
 
