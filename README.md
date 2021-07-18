@@ -1,7 +1,7 @@
 # Welcome to the Experimental Branch!
 This is where all of my experimental additions and trials will be uploaded as I deem them worthy. This is more or less the "early access" branch for those wanting to try the features for the upcoming update, and also mainly to prove that I AM, in fact, working on the next update, and allow you guys to actualy *see* what im working on. 
 
-This repository will be changing DRASTICALLY over the next few days, I will update the readme when it is ready for testing!
+This branch will be changing DRASTICALLY over the next few days, I will update the readme when it is ready for testing!
 
 # Disclaimer
 See Master branch for mental health warning and acknowledgements. 
