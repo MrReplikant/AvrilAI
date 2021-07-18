@@ -23,7 +23,7 @@ This program is not intended or designed to treat mental illness of any kind, an
 
 Project Replikant is based upon the code of an older version of Cloveranon's AIDungeon: Clover Editon. Some of their newer developments may be backported, if they are useful in improving Project Replikant, but we will not be having perfect parity. 
 
-With the aforementioned in mind, I would like to thank Cloveranon for the creation of their AI DUngeon fork, and MikkoMMM for their code allowing for sentence generation control. Without either of these things, this project simply wouldn't be possible!  
+With the aforementioned in mind, I would like to thank Cloveranon for the creation of their AI Dungeon fork, and MikkoMMM for their code allowing for sentence generation control. Without either of these things, this project simply wouldn't be possible!  
 
 # Installation Instructions for Project Replikant v1.0
 
