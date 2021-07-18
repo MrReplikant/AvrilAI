@@ -147,7 +147,7 @@ def edit_multiline(default_text=""):
 
 
     textf = TextArea()
-    bottom_bar_text=FormattedTextControl(text='\nCurrently editing. Press Ctrl+Q, Alt+Enter or Esc + Enter to save and proceed.')
+    bottom_bar_text=FormattedTextControl(text='\nCurrently editing. Press Ctrl+Q, Alt+Enter or Esc + Enter to exit.')
     bottom_bar=Window(content=bottom_bar_text)
 
     root_container = HSplit([
