@@ -9,12 +9,12 @@ def boolValue(bool):
 def instructions():
     print('\n' +
           'Project Replikant Instructions: \n' +
-          '  \n' +
+          '  Enter actions starting with a verb ex. "go to the tavern" or "attack the orc."\n' +
           '  To speak enter Me:"(thing you want to say)" followed by (Your AIs name): \n' + 
         'For example: "Me: Hello, Lilith! Lilith:" \n' +
 '  To insert your own storyline text into the conversation, enter !(thing you want to insert)')
     print('The following commands can be entered for any action:')
-    print('  "/revert"                Reverts the last action allowing you to try a different action.')
+    print('  "/revert"                Reverts the last action allowing you to pick a different action.')
     print('  "/quit"                  Quits the conversation and saves')
     print('  "/menu"                  Starts a new conversation and saves your current one')
     print('  "/retry"                 Retries the last action')
