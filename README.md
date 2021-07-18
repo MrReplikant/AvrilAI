@@ -21,6 +21,8 @@ The Goal of Project Replikant is to create something totally free to use, can be
 # Acknowledgements and Disclaimer:
 This program is not intended or designed to treat mental illness of any kind, and if you are experiencing such issues, you are heavily advised to see a medical professional, as Project Replikant is in no way intended to treat such issues. 
 
+All of Project Replikant's components are either handmade or sourced from open repositories. No code has been extracted from Replika or any other closed source application of that sort for the purpose of creating this program, and it shall remain as such. 
+
 Project Replikant is based upon the code of an older version of Cloveranon's AIDungeon: Clover Editon. Some of their newer developments may be backported, if they are useful in improving Project Replikant, but we will not be having perfect parity. 
 
 With the aforementioned in mind, I would like to thank Cloveranon for the creation of their AI Dungeon fork, and MikkoMMM for their code allowing for sentence generation control. Without either of these things, this project simply wouldn't be possible!  
