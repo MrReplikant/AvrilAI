@@ -102,6 +102,8 @@ def sample_sequence(
         top_k=0,
         top_p=0.9,
         repetition_penalty=1.0,
+        repetition_penalty_range=512,
+        repetition_penalty_slope=3.33, 
         device="cpu",
         stop_tokens=None,
         tokenizer=None
@@ -191,7 +193,7 @@ def truncate_multiple_sequences(seqs, max_len=100):
 class GPT2Generator:
     def __init__(
             self, generate_num=60, temperature=0.4, top_k=40, top_p=0.9, dtype=DTYPE,
-            model_path: Union[str, Path] = Path('models', 'pytorch-gpt2-xl-aid2-v5'), repetition_penalty=1,
+            model_path: Union[str, Path] = Path('models', 'pytorch-gpt2-xl-aid2-v5'), repetition_penalty=1.2,
     ):
         self.generate_num = generate_num
         self.temp = temperature
