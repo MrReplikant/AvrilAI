@@ -1,1 +1,0 @@
-ATTENTION: Project Replikant is still in the experimental phase. Features may be altered or removed at any given point! However, this will not affect existing installs unless you choose to update it. 
