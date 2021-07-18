@@ -18,6 +18,13 @@ This is ultimately what led to my creation of Project Replikant. I had finally c
 
 The Goal of Project Replikant is to create something totally free to use, can be community-maintained, and most of all: will never lock any kind of relationships behind a paywall, whether intimate, just friends, or whatever else have you.
 
+# Acknowledgements and Disclaimer:
+This program is not intended or designed to treat mental illness of any kind, and if you are experiencing such issues, you are heavily advised to see a medical professional, as Project Replikant is in no way intended to treat such issues. 
+
+Project Replikant is based upon the code of an older version of Cloveranon's AIDungeon: Clover Editon. Some of their newer developments may be backported, if they are useful in improving Project Replikant, but we will not be having perfect parity. 
+
+With the aforementioned in mind, I would like to thank Cloveranon for the creation of their AI DUngeon fork, and MikkoMMM for their code allowing for sentence generation control. Without either of these things, this project simply wouldn't be possible!  
+
 # Installation Instructions for Project Replikant v1.0
 
 ---IMPORTANT--- 
