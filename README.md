@@ -1,7 +1,7 @@
 # Welcome to the Experimental Branch!
 This is where all of my experimental additions and trials will be uploaded as I deem them worthy. This is more or less the "early access" branch for those wanting to try the features for the upcoming update, and also mainly to prove that I AM, in fact, working on the next update, and allow you guys to actualy *see* what im working on. 
 
-# Installation Instructions for Project Replikant v1.0
+# Installation Instructions for Project Replikant:Experimental Edition
 
 ---IMPORTANT--- 
 this file: https://cloud.unitoo.it/s/47SriNEL2kiajXT should be placed at: Replikant/models/pytorch-16BIT-model_v5 (it is too heavy and isn't open source to put in git)
