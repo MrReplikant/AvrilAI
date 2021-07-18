@@ -700,9 +700,9 @@ class GameManager:
             print()
 
             if use_ptoolkit():
-                action = input_line("> ", "main-prompt", default="%s" % "Me: ")
+                action = input_line("> ", "main-prompt", default="%s" % " ")
             else:
-                action = input_line(">You ", "main-prompt")
+                action = input_line("> ", "main-prompt")
 
             # Clear suggestions and user input
             if act_alts and not in_colab():
