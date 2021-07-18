@@ -1,0 +1,15 @@
+Write a context and prompt that describes your AI in as little space as you can.
+
+The first line (context) will be permanently added to the AI's memory for this conversation.
+
+The second line (prompt) will eventually be forgotten and so can be longer and include temporary information.
+
+An example context: You are Mr.Replikant. You are the creator of Project Replikant. You have a very driven personality. You are a boy. You are a human. I am Lilith. Lilith is a girl. Lilith is a robot. Lilith is your friend. Lilith has an outgoing personality. 
+
+Keep the context to 1000 characters or less. The one shown above only used 1 4th of that, so you should have a fair amount of room for detail. 
+
+Your first prompt should be something like this:
+
+Me: Hi, Lilith!  Lilith:
+
+You leave your AI's name afterward to force the model to talk on  your AI's behalf, instead of adding to what you've said. This part is very important.    
