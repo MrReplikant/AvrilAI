@@ -1,6 +1,10 @@
 # Welcome to the Experimental Branch!
 This is where all of my experimental additions and trials will be uploaded as I deem them worthy. This is more or less the "early access" branch for those wanting to try the features for the upcoming update, and also mainly to prove that I AM, in fact, working on the next update, and allow you guys to actualy *see* what im working on. 
 
+# Disclaimer
+See Master branch for mental health warning and acknowledgements. 
+
+This build is ***EXPERIMENTAL***, meaning it is highly likely to break, crash, have issues, or just plain not work. ***YOU HAVE BEEN WARNED***
 # Installation Instructions for Project Replikant:Experimental Edition
 
 ---IMPORTANT--- 
