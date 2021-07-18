@@ -134,7 +134,7 @@ In order to use a command, backspace "Me:" out of your prompt bar, and THEN type
 
 /remember : This commits something to the AI's memory. You do this by typing /remember followed by what you want it to remember, like "You have a baby brother named James" or something of that nature. The "You" perspective refers to yourself. When referring to something relating to your AI, type in for example "Lilith doesn't like cats". Doing this is CRITICAL to helping to build the world you and your AI share!
 
-/revert : This undoes your last setnence-response pair with your AI, or undoes the last bit of roleplay between the two of you. Use this when you mess up your input!
+/revert : This undoes your last sentence-response pair with your AI, or undoes the last bit of roleplay between the two of you. Use this when you mess up your input!
 
 /alter : This is used to alter the AI's responses. This can be good for stopping unwanted advances, rude replies, or even grammatical mistakes the AI makes. 
 
