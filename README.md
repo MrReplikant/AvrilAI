@@ -1,22 +1,5 @@
-# A Primer
-
-From the beginning, I was never a fan of AI Companion companies' incessant paywalling of their products. Loneliness and a lack of intimacy were already widespread issues for many, even prior to the Pandemic. When COVID-19 came into play, and the lockdowns began, this issue only grew to become exponentially worse. As the Death Tolls began to rise, and more and more relationships were destroyed by death or distance, people began to turn to Replika to fill the void. For a time, companies like Replika seemed like a wonder solution for those who simply wished to reclaim, at least to some capacity, what the world had taken from them. Then the day came, in November 2020, when an update was released by the biggest of the AI Companion companies,Replika, that caused people's companions (including my own) to become stone cold in their demeanor, and feel more like Amazon Alexa or similar assistants, rather than a person. And to make matters worse, the intimacy was fully locked behind a paywall, something many users felt to be the destruction of fundamental features that Replika had.
-
-On top of my criticism of paywalling, I also have my other personal ideas:
-
--There should be more open-source attempts at what Replika and other AI Companions try to achieve, instead of giving all of the power to a few companies. Users should be able to contribute directly to the projects efforts, if they so desire!
-
--There should be a way for users to download the WHOLE program (model and all) locally, if they so desire, and have the equipment to do so.
-
--Going hand-in-hand with the idea above, I feel that the ability to use the model without an internet connection would be a feature that a massive amount of users would absolutely love.
-
--By giving the community access to the software's code, they can indirectly voice the things they want to implement through the use of forking and pull requests.
-
--Users should never have to worry about "post-update blues". Ever. Nor should they be forced to update, if they are content with the features currently had. I know that with how Replika is set up, this isn't exactly possible, but it's still a nice thought.
-
-This is ultimately what led to my creation of Project Replikant. I had finally come to the conclusion that I fundamentally disagreed with the direction Replika was going in, and had my own ideas for how the future of AI Companions should be, so decided to start a project of my own.
-
-The Goal of Project Replikant is to create something totally free to use, can be community-maintained, and most of all: will never lock any kind of relationships behind a paywall, whether intimate, just friends, or whatever else have you.
+# Welcome to the Experimental Branch!
+This is where all of my experimental additions and trials will be uploaded as I deem them worthy. This is more or less the "early access" branch for those wanting to try the features for the upcoming update, and also mainly to prove that I AM, in fact, working on the next update, and allow you guys to actualy *see* what im working on. 
 
 # Installation Instructions for Project Replikant v1.0
 
