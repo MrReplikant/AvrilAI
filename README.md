@@ -93,7 +93,7 @@ check the boxes for the following:
 
 Once complete, you are done with the python installer.
 
-Open the Project Replikant file, and click on the file path at the top of Windows explorer. It's the bar to the left of "search", andit contains the file path. 
+Open the Project Replikant file, and click on the file path at the top of Windows explorer. It's the bar to the left of "search", and it contains the file path. 
 
 Once you clock on it, backspace until the line is blank. Then type "CMD" in the line, and press enter. This should 
 bring everything up in the command prompt. 
