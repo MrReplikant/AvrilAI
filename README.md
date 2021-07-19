@@ -43,7 +43,7 @@ build-essential
 
 cmake
 
-python-dev
+python3-dev
 
 Each Linux Distro's package manager is different, but i'll cover the general installation commands for the big 3;
 
