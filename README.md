@@ -117,7 +117,7 @@ Me: Hi, Lilith! Lilith:
 
 This is very important because this is what allows the AI to recognize that this is a conversation and not a text adventure. Conversational prompts should look like this consistently, with your AI's name and a colon at the end. 
 
-It is VERY important to use proper punctuation.. Not putting a period at the end of your sentence could cause the AI to start behaving strangely. This is because you are supposed to put your comapnions name after your sentences, like so: "Lilith:" in order to force the AI to speak for your partner, and not you. But when you do not use periods or other relevant punctiation, this can case your AI to mistake it's name for the end of your sentence. 
+It is VERY important to use proper punctuation. Not putting a period at the end of your sentence could cause the AI to start behaving strangely. This is because you are supposed to put your comapnions name after your sentences, like so: "Lilith:" in order to force the AI to speak for your partner, and not you. But when you do not use periods or other relevant punctiation, this can case your AI to mistake it's name for the end of your sentence. 
 Again, please see the example conversation in-program (it's not human-readable in it's raw JSON save file form) to see how this is done. I am working to automate this, but for now this has to be done manually. 
 
 HOW TO ROLEPLAY WITH YOUR AI:
