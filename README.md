@@ -10,7 +10,7 @@ This build is ***EXPERIMENTAL***, meaning it is highly likely to break, crash, h
 # Installation Instructions for Project Replikant:Experimental Edition
 
 ---IMPORTANT--- 
-this file: https://mega.nz/file/CQtmnRaS#Y9vigJmTZAoiND-WJNSvLNJE6kr1z2ZPLfM0mEL36QE should be placed at: Replikant/models/pytorch-16BIT-model_v5 (it is too heavy and isn't open source to put in git)
+this file: https://mega.nz/file/CQtmnRaS#Y9vigJmTZAoiND-WJNSvLNJE6kr1z2ZPLfM0mEL36QE should be placed at: Replikant/models/pytorch-16BIT-model_v5 (it is too heavy to put in git)
 
 If you already have this from a previous installation, you do NOT need to download it again, but rather copy the model to the "models" folder of Experimental Edition!
 
