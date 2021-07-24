@@ -30,7 +30,7 @@ With the aforementioned in mind, I would like to thank Cloveranon for the creati
 # Installation Instructions for Project Replikant v1.0
 
 ---IMPORTANT--- 
-this file:  https://mega.nz/file/CQtmnRaS#Y9vigJmTZAoiND-WJNSvLNJE6kr1z2ZPLfM0mEL36QEshould be placed at: Project-Replikant/models/ReplikantModel (it is too heavy to put in git)
+this file:  https://mega.nz/file/CQtmnRaS#Y9vigJmTZAoiND-WJNSvLNJE6kr1z2ZPLfM0mEL36QE should be placed at: Project-Replikant/models/ReplikantModel (it is too heavy to put in git)
 
 # For Linux (64 bit only):
 
