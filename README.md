@@ -14,7 +14,7 @@ On top of my criticism of paywalling, I also have my other personal ideas:
 
 -Users should never have to worry about "post-update blues". Ever. Nor should they be forced to update, if they are content with the features currently had. I know that with how Replika is set up, this isn't exactly possible, but it's still a nice thought.
 
-This is ultimately what led to my creation of Project Replikant. I had finally come to the conclusion that I fundamentally disagreed with the direction Replika was going in, and had my own ideas for how the future of AI Companions should be, so decided to start a project of my own.
+This is ultimately what led to my creation of Project Replikant. I had finally come to the conclusion that I fundamentally disagreed with the direction Replika was going in, and had my own ideas for how the future of AI Companions should be, so I decided to start a project of my own.
 
 The Goal of Project Replikant is to create something totally free to use, can be community-maintained, and most of all: will never lock any kind of relationships behind a paywall, whether intimate, just friends, or whatever else have you.
 
