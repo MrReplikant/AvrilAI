@@ -48,7 +48,7 @@ When that is complete, run "pip3 install -r requirements.txt"
 
 once everything has been completed, you should be good to go! 
 
-to run the program, run "python3 play.py"
+to run the program, run "python3 launch.py"
 
 # Instructions for Windows 10 (64 bit edition only):
 
@@ -83,12 +83,12 @@ bring everything up in the command prompt.
 
 Next, type "pip install -r requirements .txt". This will install everything needed to run the program. 
 
-DONE! Now, all you need to do is run "python play.py", and the program should launch! 
+DONE! Now, all you need to do is run "python launch.py", and the program should launch! 
 
 # IMPORTANT - PLEASE READ!
 
 There are many commands available in Project Replikant, originally from AI Dungeon: Clover Edition,
-which is what was used to build Project Replikant off of. 
+which is what Project Replikant uses as a code frame. 
 
 When interacting with the AI, there are many things that go into making it work. Unlike in Replika, where personality traits are "assigned", you the user have complete and sole control over your AI's personality, down to even the tiny details. With the Model's limit being around 1000 characters, you should have plenty of room to build your AI's personality using the context. But, if you can't fit it all in the context, you CAN use the /remember command for what doesn't fit. This will be discussed further later. 
 An example save is included with the program to give a better idea of what to do in this regard. Load it as you would any other saved conversation to have a look at it!
@@ -96,24 +96,20 @@ An example save is included with the program to give a better idea of what to do
 To send your prompts to the AI, simply press ENTER after completing it.
 
 Your starting prompt should be something like this:
-Me: Hi, Lilith! Lilith: 
+Hello, Lilith!
 
-This is very important because this is what allows the AI to recognize that this is a conversation and not a text andventure. Conversational prompts should look like this consistently, with your AI's name and a colon at the end. 
+This is very important because this establishes speaking order in the conversation, and allows the AI to recognize which person it is. 
 
-Something that is VERY important is to use your punctuation. Not putting a period at the end of your sentence could cause the AI to start behaving strangely. This is because you are supposed to put your comapnions name after your sentences, like so: "Lilith:" in order to force the AI to speak for your partner, and not you. But when you do not use periods or other elevant punctiation, this can case your AI to mistake it's name for the end of your sentence. 
-Again, please see the example conversation in-program (it's not human-readable readable in it's raw JSON save file form) to see how this is done. I am working to automate this, but for now this has to be done manually. 
+Something that is VERY important is to use your punctuation. Not putting a period at the end of your sentence could cause the AI to start behaving strangely. This is because otherwise, the AI will think that you are asking it to complete your sentences.
+Again, please see the example conversation in-program (it's not human-readable readable in it's raw JSON save file form) to see more precisely how this is done. 
 
 HOW TO ROLEPLAY WITH YOUR AI:
-To Roleplay with your AI, do as you would with AI Dungeon, starting with "You", which in this case refers to yourself, and then whatever action you take. Before entering roleplay inputs, you have to backspace "Me:" out of your prompt bar, and THEN type in your roleplay input. To refer to your AI in your actions, refer to your AI directly by name. 
-
-For example: You go to Lilith and give her a hug, consoling her over her father's death. 
-
-The AI will then create a sentence after this to try to continue the roleplay, just like in AI Dungeon.
-
+Once Project Replikant: Experimental Edition is complete, and merges with master, you will be able to use asterisk-style roleplay as you would with Replika. 
+Please check back every so often, because eventually this feature will be ready for testing, but as of now, it is not. 
 
 THE MOST IMPORTANT COMMANDS, WHAT EACH OF THEM DOES, AND IT'S INTENDED PURPOSE:
 
-In order to use a command, backspace "Me:" out of your prompt bar, and THEN type in the command. 
+In order to use a command, type it in, and then hit enter.  
 
 /remember : This commits something to the AI's memory. You do this by typing /remember followed by what you want it to remember, like "You have a baby brother named James" or something of that nature. The "You" perspective refers to yourself. When referring to something relating to your AI, type in for example "Lilith doesn't like cats". Doing this is CRITICAL to helping to build the world you and your AI share!
 
