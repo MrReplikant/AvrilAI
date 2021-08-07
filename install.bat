@@ -20,9 +20,6 @@ echo.
 echo Please disable your anti-virus before continuing the install process.
 echo.
 echo.
-echo Using an Nvidia GPU requires 6 GB HDD space, 16 GB RAM, and at least 6 GB of VRAM on your GPU for GPT-2 or up to 8 GB of VRAM for GPT-Neo.
-echo Using only your CPU requires 2 GB HDD space, 16 GB RAM.
-echo Additionally, models require between 6 and 10 GB HDD space each, and you will need at least one.
 echo.
 :: console bell
 echo 
