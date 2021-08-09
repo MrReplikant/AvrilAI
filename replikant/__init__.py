@@ -27,7 +27,7 @@ if not use_ptoolkit() and os.name == 'nt':
 
 logger.info("Colab detected: {}".format(in_colab()))
 
-if (__name__ == "__main__" or __name__ == "aidungeon"):
+if (__name__ == "__main__" or __name__ == "replikant"):
     with open(Path("interface/", "clover"), "r", encoding="utf-8") as file_:
         print(file_.read())
     try:
