@@ -9,3 +9,6 @@ GPT-R to have more fluid conversational ability. Time will ultimately tell.
 The Noise parameter has definitely been of incredible help. So much so that I have managed to train a decent model in only 1,000 training steps. However, there is an optimal threshold past of which causes the training to make the model spew gibberish. Will be researching this further.
 
 An ongoing challenge remains that I still need quite a lot of training data. This shortage has proven to be crippling to the project, as it is quite difficult to train the model in emotional situations when there are none such data available. I have pleaded many times with the users and followers to help me, but as of now it seems my cries have fallen upon deaf ears. Or, perhaps, they are having just as much trouble as I am. It could easily be either. 
+
+
+9/4/21 After almost a month and some extensive research and tinkering, I've finally found some settings that will greatly help to compensate for the lack of power behind GPT-R, and at least somewhat make up for the abysmally small dataset. I am also beginning to work on roleplay, which for now will use parenthesis instead of asterisks, simply because of a big in cloder edition that causes the inline editor to remove them for some strange reason. I really gotta figure out what the hell is up with that. 
