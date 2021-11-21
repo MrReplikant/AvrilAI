@@ -5,7 +5,7 @@ from prompt_toolkit.layout.containers import (
     HSplit,
     Window,
 )
-from utils import clear_lines, getTermWidth
+from .utils import clear_lines, getTermWidth
 from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.layout.layout import Layout
 from prompt_toolkit.widgets import (
@@ -147,7 +147,7 @@ def edit_multiline(default_text=""):
 
 
     textf = TextArea()
-    bottom_bar_text=FormattedTextControl(text='\nCurrently editing. Press Ctrl+Q, Alt+Enter or Esc + Enter to save and proceed.')
+    bottom_bar_text=FormattedTextControl(text='\nCurrently editing. Press Ctrl+Q, Alt+Enter or Esc + Enter to exit.')
     bottom_bar=Window(content=bottom_bar_text)
 
     root_container = HSplit([

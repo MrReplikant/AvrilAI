@@ -6,7 +6,7 @@ import textwrap
 import os
 import sys
 
-from getconfig import logger, settings, colors, ptcolors
+from .getconfig import logger, settings, colors, ptcolors
 from shutil import get_terminal_size
 
 
@@ -64,7 +64,7 @@ if in_colab():
 else:
     try:
         if settings.getboolean('prompt-toolkit'):
-            from inline_editor import edit_multiline
+            from .inline_editor import edit_multiline
             from prompt_toolkit import prompt as ptprompt
             from prompt_toolkit import print_formatted_text
             from prompt_toolkit.styles import Style
@@ -305,6 +305,8 @@ def sentence_split(text):
     text = text.replace("<2elp>","..")
     sentences = text.split("<stop>")
     sentences = [s.strip() for s in sentences]
+    if sentences[-1] == "":
+        sentences = sentences[:-1]
     return sentences
 
 
@@ -399,6 +401,36 @@ def get_num_options(num):
                 print("Error invalid choice. ")
         except ValueError:
             print("Error invalid choice. ")
+
+
+def player_died(text):
+    """
+    TODO: Add in more sophisticated NLP, maybe a custom classifier
+    trained on hand-labelled data that classifies second-person
+    statements as resulting in death or not.
+    """
+    lower_text = text.lower()
+    you_dead_regexps = [
+        "you('re| are) (dead|killed|slain|no more|nonexistent)",
+        "you (die|pass away|perish|suffocate|drown|bleed out)",
+        "you('ve| have) (died|perished|suffocated|drowned|been (killed|slain))",
+        "you (\w* )?(yourself )?to death",
+        "you (\w* )*(collapse|bleed out|chok(e|ed|ing)|drown|dissolve) (\w* )*and (die(|d)|pass away|cease to exist|(\w* )+killed)",
+    ]
+    return any(re.search(regexp, lower_text) for regexp in you_dead_regexps)
+
+
+def player_won(text):
+    lower_text = text.lower()
+    won_phrases = [
+        "you ((\w* )*and |)live happily ever after",
+        "you ((\w* )*and |)live (forever|eternally|for eternity)",
+        "you ((\w* )*and |)(are|become|turn into) ((a|now) )?(deity|god|immortal)",
+        "you ((\w* )*and |)((go|get) (in)?to|arrive (at|in)) (heaven|paradise)",
+        "you ((\w* )*and |)celebrate your (victory|triumph)",
+        "you ((\w* )*and |)retire",
+    ]
+    return any(re.search(regexp, lower_text) for regexp in won_phrases)
 
 
 def cut_trailing_quotes(text):
@@ -554,42 +586,42 @@ def mapping_variation_pairs(mapping):
 
 
 first_to_second_mappings = [
-    ("I'm", "I'm"),
-    ("i'm", "i'm"),
-    ("Im", "I'm"),
-    ("im", "i'm"),
-    ("Ive", "I've"),
-    ("ive", "i've"),
-    ("I am", "I am"),
-    ("i am", "i am"),
-    ("wasn't i", "wasn't i"),
-    ("I", "I"),
-    ("I'd", "I'd"),
-    ("i", "i"),
-    ("I've", "I've"),
-    ("was I", "was I"),
-    ("am I", "am I"),
-    ("was i", "was i"),
-    ("am i", "am i"),
-    ("wasn't I", "wasn't I"),
-    ("I", "I"),
-    ("i", "i"),
-    ("I'd", "I'd"),
-    ("i'd", "i'd"),
-    ("I've", "I've"),
-    ("i've", "i've"),
-    ("I was", "I was"),
-    ("i was", "i was"),
-    ("my", "my"),
-    ("we", "we"),
-    ("we're", "we're"),
-    ("mine", "mine"),
-    ("me", "me"),
-    ("us", "us"),
-    ("our", "our"),
-    ("I'll", "I'll"),
-    ("i'll", "i'll"),
-    ("myself", "myself"),
+    ("I'm", "you're"),
+    ("i'm", "you're"),
+    ("Im", "you're"),
+    ("im", "you're"),
+    ("Ive", "you've"),
+    ("ive", "you've"),
+    ("I am", "you are"),
+    ("i am", "you are"),
+    ("wasn't I", "weren't you"),
+    ("I", "you"),
+    ("I'd", "you'd"),
+    ("i", "you"),
+    ("I've", "you've"),
+    ("was I", "were you"),
+    ("am I", "are you"),
+    ("was i", "were you"),
+    ("am i", "are you"),
+    ("wasn't I", "weren't you"),
+    ("I", "you"),
+    ("i", "you"),
+    ("I'd", "you'd"),
+    ("i'd", "you'd"),
+    ("I've", "you've"),
+    ("i've", "you've"),
+    ("I was", "you were"),
+    ("i was", "you were"),
+    ("my", "your"),
+    ("we", "you"),
+    ("we're", "you're"),
+    ("mine", "yours"),
+    ("me", "you"),
+    ("us", "you"),
+    ("our", "your"),
+    ("I'll", "you'll"),
+    ("i'll", "you'll"),
+    ("myself", "yourself"),
 ]
 
 second_to_first_mappings = [

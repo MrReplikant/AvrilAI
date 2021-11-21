@@ -1,7 +1,7 @@
 import json
 import re
-from getconfig import settings
-from utils import output, format_result, format_input, get_similarity
+from .getconfig import settings
+from .utils import output, format_result, format_input, get_similarity
 
 
 class Story:
@@ -26,7 +26,9 @@ class Story:
             temperature=settings.getfloat('temp'),
             top_p=settings.getfloat('top-p'),
             top_k=settings.getint('top-keks'),
-            repetition_penalty=settings.getfloat('rep-pen'))
+            repetition_penalty=settings.getfloat('rep-pen'),
+            repetition_penalty_range=settings.getint('rep-pen-range'),
+            repetition_penalty_slope=settings.getfloat('rep-pen-slope'))
         if record:
             self.actions.append(format_input(action))
             self.results.append(format_input(result))
@@ -87,6 +89,8 @@ class Story:
         res["top-p"] = settings.getfloat("top-p")
         res["top-keks"] = settings.getint("top-keks")
         res["rep-pen"] = settings.getfloat("rep-pen")
+        res["rep-pen-range"] = settings.getint("rep-pen-range")
+        res["rep-pen-slope"] = settings.getfloat("rep-pen-slope")
         res["context"] = self.context
         res["memory"] = self.memory
         res["actions"] = self.actions
@@ -98,6 +102,12 @@ class Story:
         settings["top-p"] = str(d["top-p"])
         settings["top-keks"] = str(d["top-keks"])
         settings["rep-pen"] = str(d["rep-pen"])
+        try:
+            settings["rep-pen-range"] = str(d["rep-pen-range"])
+            settings["rep-pen-slope"] = str(d["rep-pen-slope"])
+        except:
+            settings["rep-pen-range"] = "512"
+            settings["rep-pen-slope"] = "3.33"
         self.context = d["context"]
         self.memory = d["memory"]
         self.actions = d["actions"]

@@ -39,6 +39,8 @@ These settings, their descriptions, and their defaults appear in the settings me
 setting_info = {
     "temp":             ["Higher values make the AI more random.", 0.4],
     "rep-pen":          ["Controls how repetitive the AI is allowed to be.", 1.2],
+    "rep-pen-range":    ["Controls many tokens are affected by the penalty.", 512],
+    "rep-pen-slope":    ["Controls the penalty curve slope.", 3.33],
     "text-wrap-width":  ["Maximum width of lines printed by computer.", 80],
     "console-bell":     ["Beep after AI generates text.", "on"],
     "top-keks":         ["Number of words the AI can randomly choose.", 20],
@@ -50,6 +52,6 @@ setting_info = {
     "generate-num":     ["Approximate number of words to generate.", 60],
     "top-p":            ["Changes number of words nucleus sampled by the AI.", 0.9],
     "log-level":        ["Development log level. <30 is for developers.", 30],
+    "history-gpt-2":    ["Number of tokens to feed into GPT-2 models.", 1024],
+    "history-gpt-neo":  ["Number of tokens to feed into GPT-Neo models.", 2048],
 }
-
-

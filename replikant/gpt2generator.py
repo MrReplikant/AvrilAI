@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 from typing import Union
@@ -5,10 +6,10 @@ from typing import Union
 import torch
 import torch.nn.functional as F
 import re
-from gpt2 import GPT2LMHeadModelExperimental
-from transformers import GPT2Tokenizer, GPT2LMHeadModel
-from getconfig import settings, logger
-from utils import cut_trailing_sentence, output, clear_lines, format_result, use_ptoolkit
+from .gpt2 import GPT2LMHeadModelExperimental
+from transformers import GPT2Tokenizer, GPT2LMHeadModel, GPTNeoForCausalLM
+from .getconfig import settings, logger
+from .utils import cut_trailing_sentence, output, clear_lines, format_result, use_ptoolkit
 
 if not settings.getboolean('force-cpu') and not torch.cuda.is_available():
     logger.warning('CUDA is not available, you are limited to CPU only.')
@@ -32,11 +33,7 @@ def getTokens(tokenizer, l):
 # the tokenizer does not preserve white space at the front of the string.
 # so we will append something else to the front of the string and then remove it after tokenization
 def hackyEncode(tokenizer, s):
-    return tokenizer.encode('====\n ' + s)[2:]
-
-
-def hackyWhiteSpaceCutter(prompt):
-    return re.search(r'\s*$', prompt).group(0)
+    return tokenizer('====\n ' + s, verbose=False).input_ids[2:]
 
 
 def memory_merge(prompt, context, tokenizer, maxHistory=1024):
@@ -46,16 +43,20 @@ def memory_merge(prompt, context, tokenizer, maxHistory=1024):
     # the tokenizer is kind of broken for the first input, especially if it includes white space. Same with any trailing white space on the last output.
     # I'm going with the add prefix option but I'm not sure it's quite right
     prompt_tokens = tokenizer.encode(prompt, add_special_tokens=False, add_prefix_space=True)
-    context_tokens = hackyEncode(tokenizer, hackyWhiteSpaceCutter(prompt) + context)
-    context_tokens = context_tokens[-(maxHistory - len(prompt_tokens)):]
-    # logger.debug('DECODED CONTEXT TOKENS: `%r`', tokenizer.convert_ids_to_tokens(context_tokens))
-    prompt_tokens.extend(context_tokens)
-    context_tokens = prompt_tokens
-    # logger.debug('DECODED OUTPUT IS: `%r`', tokenizer.decode(context_tokens, clean_up_tokenization_spaces=False))
-    # this is a hack and it should be up to the sampler to deal with max size
-    if len(context_tokens) > maxHistory:
-        logger.error("CONTEXT IS TOO LONG ERROR")
-        context_tokens = context_tokens[-maxHistory:]
+    if len(prompt_tokens) >= maxHistory:
+        logger.debug("Clamping the amount of prompt tokens.")
+        context_tokens = prompt_tokens[-maxHistory:]
+    else:
+        context_tokens = hackyEncode(tokenizer, context)
+        context_tokens = context_tokens[-(maxHistory - len(prompt_tokens)):]
+        # logger.debug('DECODED CONTEXT TOKENS: `%r`', tokenizer.convert_ids_to_tokens(context_tokens))
+        prompt_tokens.extend(context_tokens)
+        context_tokens = prompt_tokens
+        # logger.debug('DECODED OUTPUT IS: `%r`', tokenizer.decode(context_tokens, clean_up_tokenization_spaces=False))
+        # this is a hack and it should be up to the sampler to deal with max size
+        if len(context_tokens) > maxHistory:
+            logger.error("CONTEXT IS TOO LONG ERROR")
+            context_tokens = context_tokens[-maxHistory:]
     return context_tokens
 
 
@@ -102,13 +103,15 @@ def sample_sequence(
         top_k=0,
         top_p=0.9,
         repetition_penalty=1.0,
+        repetition_penalty_range=512,
+        repetition_penalty_slope=3.33,
         device="cpu",
         stop_tokens=None,
         tokenizer=None
 ):
     """Actually generate the tokens"""
     logger.debug(
-        'temp: {}    top_k: {}    top_p: {}    rep-pen: {}'.format(temperature, top_k, top_p, repetition_penalty))
+        'temp: {}    top_k: {}    top_p: {}    rep-pen: {}    rep-pen-range: {}    rep-pen-slope: {}'.format(temperature, top_k, top_p, repetition_penalty, repetition_penalty_range, repetition_penalty_slope))
     context_tokens = context
     context = torch.tensor(context, dtype=torch.long, device=device)
     # context = context.repeat(num_samples, 1)
@@ -117,6 +120,13 @@ def sample_sequence(
     next_token = context
     pasts = None
     clines = 0
+
+    penalty = None
+    if not repetition_penalty_range is None and not repetition_penalty_slope is None and repetition_penalty_range > 0:
+        penalty = (torch.arange(repetition_penalty_range)/(repetition_penalty_range - 1)) * 2. - 1
+        penalty = (repetition_penalty_slope * penalty) / (1 + torch.abs(penalty) * (repetition_penalty_slope - 1))
+        penalty = 1 + ((penalty + 1) / 2) * (repetition_penalty - 1)
+
     with torch.no_grad():
         for j in range(length):
             # why would we ever not use past?
@@ -128,8 +138,11 @@ def sample_sequence(
                 input_ids_next = next_token
 
             # Note: we could also use 'past' with GPT-2/Transfo-XL/XLNet/CTRL (cached hidden-states)
-            logits, pasts = model(input_ids=input_ids_next, past=pasts)
-            logits = logits[-1, :].float()
+            model_kwargs = {"past": pasts, "use_cache": True}
+            model_inputs = model.prepare_inputs_for_generation(generated.unsqueeze(0), **model_kwargs)
+            model_outputs = model(**model_inputs, return_dict=True)
+            logits, pasts = model_outputs.logits, model_outputs.past_key_values
+            logits = logits[0, -1, :].float()
 
             # Originally the order was Temperature, Repetition Penalty, then top-k/p
             if settings.getboolean('top-p-first'):
@@ -137,9 +150,20 @@ def sample_sequence(
 
             logits = logits / (temperature if temperature > 0 else 1.0)
 
-            # repetition penalty from CTRL (https://arxiv.org/abs/1909.05858)
-            for k in set(generated.tolist()):
-                logits[k] /= repetition_penalty
+            # repetition penalty from CTRL (https://arxiv.org/abs/1909.05858) plus range limit
+            if repetition_penalty != 1.0:
+                if penalty is not None:
+                    penalty_len = min(generated.shape[0], repetition_penalty_range)
+                    penalty_context = generated[-repetition_penalty_range:]
+                    score = torch.gather(logits, 0, penalty_context)
+                    penalty = penalty.type(score.dtype).to(score.device)
+                    penalty_window = penalty[-penalty_len:]
+                    score = torch.where(score < 0, score * penalty_window, score / penalty_window)
+                    logits.scatter_(0, penalty_context, score)
+                else:
+                    score = torch.gather(logits, 0, generated)
+                    score = torch.where(score < 0, score * repetition_penalty, score / repetition_penalty)
+                    logits.scatter_(0, generated, score)
 
             if not settings.getboolean('top-p-first'):
                 logits = top_k_top_p_filtering(logits, top_k=top_k, top_p=top_p)
@@ -160,10 +184,9 @@ def sample_sequence(
                 clear_lines(clines)
                 generated.text = format_result(generated.text)
                 clines = output(generated.text, "ai-text")
-            last_token = tokenizer.decode(o[-1], clean_up_tokenization_spaces=False, skip_special_tokens=True)
+            last_token = tokenizer.decode(o[-1], clean_up_tokenization_spaces=False, skip_special_tokens=False)
             if ([ele for ele in [".", "!", "?",'"',")"] if (ele in last_token)]):
                 break
-           
             if (
                     (stop_tokens is not None)
                     and (j > 4)
@@ -180,7 +203,6 @@ def sample_sequence(
     clear_lines(clines)
     return generated
 
-
 def truncate_multiple_sequences(seqs, max_len=100):
     """Truncate multiple sequences, longest first, removing first."""
     while sum(len(s) for s in seqs) > max_len:
@@ -191,7 +213,7 @@ def truncate_multiple_sequences(seqs, max_len=100):
 class GPT2Generator:
     def __init__(
             self, generate_num=60, temperature=0.4, top_k=40, top_p=0.9, dtype=DTYPE,
-            model_path: Union[str, Path] = Path('models', 'pytorch-gpt2-xl-aid2-v5'), repetition_penalty=1,
+            model_path: Union[str, Path] = Path('models', 'pytorch-gpt2-xl-aid2-v5'), repetition_penalty=1, repetition_penalty_range=512, repetition_penalty_slope=3.33
     ):
         self.generate_num = generate_num
         self.temp = temperature
@@ -200,8 +222,10 @@ class GPT2Generator:
         self.samples = 1
         self.dtype = dtype
         self.repetition_penalty = repetition_penalty
+        self.repetition_penalty_range = repetition_penalty_range
+        self.repetition_penalty_slope = repetition_penalty_slope
         self.batch_size = 1
-        self.max_history_tokens = 1024 - generate_num
+        self.max_history_tokens = settings.getint("history-gpt-2") - generate_num
         self.stop_token = "<|endoftext|>"
 
         if isinstance(model_path, str):
@@ -225,6 +249,22 @@ class GPT2Generator:
         # Load tokenizer and model
         model_class, tokenizer_class = MODEL_CLASSES["gpt2-experimental"] if settings.getboolean(
             "gpt2_experimental") else MODEL_CLASSES["gpt2"]
+
+        # Checking 3 places to see if it's a gpt-neo model
+        with open(os.path.join(str(model_path), "config.json")) as f:
+            model_config = json.load(f)
+        neo_in_path = "gpt-neo" in str(model_path).lower()
+        neo_in_architectures = "architectures" in model_config and "GPTNeoForCausalLM" in model_config["architectures"]
+        neo_in_model_type = "model_type" in model_config and "gpt_neo" == model_config["model_type"]
+        logger.info(
+            "Looking for GPT-Neo - path:{}, arch:{}, type:{}".format(str(neo_in_path), str(neo_in_architectures), str(neo_in_model_type)))
+
+        if neo_in_path or neo_in_architectures or neo_in_model_type:
+            self.max_history_tokens = settings.getint("history-gpt-neo") - generate_num
+            model_class = GPTNeoForCausalLM
+        
+        logger.info("Max token history: " + str(self.max_history_tokens))
+
         self.tokenizer = tokenizer_class.from_pretrained(str(self.checkpoint_path))
         self.model = model_class.from_pretrained(str(self.checkpoint_path))
         self.model.to(self.dtype).to(self.device)
@@ -232,7 +272,7 @@ class GPT2Generator:
 
     def sample_sequence(
             self, context_tokens=None, top_k=None, top_p=None, repetition_penalty=None, generate_num=None,
-            temperature=None, stop_tokens=None
+            temperature=None, stop_tokens=None, repetition_penalty_range=None, repetition_penalty_slope=None
     ):
         assert (top_k is not None)
         assert (temperature is not None)
@@ -243,6 +283,10 @@ class GPT2Generator:
         top_k = top_k if top_k is not None else self.top_k
         top_p = top_p if top_p is not None else self.top_p
         repetition_penalty = repetition_penalty if repetition_penalty is not None else self.repetition_penalty
+        repetition_penalty_range = repetition_penalty_range if repetition_penalty_range is not None else self.repetition_penalty_range
+        repetition_penalty_slope = repetition_penalty_slope if repetition_penalty_slope is not None else self.repetition_penalty_slope
+        length = len(context_tokens) + generate_num
+
         out = sample_sequence(
             model=self.model,
             context=context_tokens,
@@ -252,6 +296,8 @@ class GPT2Generator:
             top_k=top_k,
             top_p=top_p,
             repetition_penalty=repetition_penalty,
+            repetition_penalty_range=repetition_penalty_range,
+            repetition_penalty_slope=repetition_penalty_slope,
             device=self.device,
             stop_tokens=stop_tokens,
             tokenizer=self.tokenizer
@@ -269,7 +315,6 @@ class GPT2Generator:
         first_letter_capitalized = result[0].isupper()
         result = result.replace('."', '".')
         result = result.replace("#", "")
-        result = result.replace("*", "")
         # TODO look at this I think blank lines should be fine or blacklisted at generation time
         result = result.replace("\n\n", "\n")
         # result = first_to_second_person(result)
@@ -284,7 +329,7 @@ class GPT2Generator:
 
     def generate_raw(
             self, context, prompt='', generate_num=None, temperature=None, top_k=None, top_p=None,
-            repetition_penalty=None, stop_tokens=None
+            repetition_penalty=None, repetition_penalty_range=512, repetition_penalty_slope=3.33, stop_tokens=None
     ):
         assert (top_k is not None)
         assert (temperature is not None)
@@ -311,6 +356,8 @@ class GPT2Generator:
                 top_k=top_k,
                 top_p=top_p,
                 repetition_penalty=repetition_penalty,
+                repetition_penalty_range=repetition_penalty_range,
+                repetition_penalty_slope=repetition_penalty_slope,
                 stop_tokens=stop_tokens,
             )
             text += out.text
@@ -329,7 +376,7 @@ class GPT2Generator:
                     text = text[:index]
         return text
 
-    def generate(self, context, prompt='', temperature=None, top_p=None, top_k=None, repetition_penalty=None, depth=0):
+    def generate(self, context, prompt='', temperature=None, top_p=None, top_k=None, repetition_penalty=None, repetition_penalty_range=512, repetition_penalty_slope=3.33, depth=0):
         assert (top_k is not None)
         assert (temperature is not None)
         assert (top_p)
@@ -342,7 +389,7 @@ class GPT2Generator:
         assert (prompt + context)
 
         text = self.generate_raw(
-            context, prompt, temperature=temperature, top_k=top_k, top_p=top_p, repetition_penalty=repetition_penalty,
+            context, prompt, temperature=temperature, top_k=top_k, top_p=top_p, repetition_penalty=repetition_penalty, repetition_penalty_range=repetition_penalty_range, repetition_penalty_slope=repetition_penalty_slope,
             stop_tokens=self.tokenizer.encode(["<|endoftext|>", ">"])
         )
 
@@ -367,7 +414,7 @@ class GPT2Generator:
                 logger.info("Model generated empty text trying again %r", depth)
                 return self.generate(
                     prompt, context, temperature=temperature, top_p=top_p, top_k=top_k,
-                    repetition_penalty=repetition_penalty, depth=depth + 1
+                    repetition_penalty=repetition_penalty, repetition_penalty_range=repetition_penalty_range, repetition_penalty_slope=repetition_penalty_slope, depth=depth + 1
                 )
             else:
                 logger.warn(

@@ -1,29 +1,10 @@
-import traceback
 from pathlib import Path
-from datetime import datetime
 
-# remove this in a few days
-with open(Path('interface', 'start-message.txt'), 'r') as file_:
-    print('\x1B[7m' + file_.read() + '\x1B[27m')
-import gc
-import torch
-
-from getconfig import config, setting_info
-from storymanager import Story
-from utils import *
-from gpt2generator import GPT2Generator
-from interface import instructions
-
-# add color for windows users that install colorama
-#   It is not necessary to install colorama on most systems
-try:
-    import colorama
-
-    colorama.init()
-except ModuleNotFoundError:
-    pass
-
-logger.info("Colab detected: {}".format(in_colab()))
+from .getconfig import config, setting_info
+from .storymanager import Story
+from .utils import *
+from .gpt2generator import GPT2Generator
+from .interface import instructions
 
 
 def get_generator():
@@ -68,6 +49,8 @@ def get_generator():
                 top_k=settings.getint("top-keks"),
                 top_p=settings.getfloat("top-p"),
                 repetition_penalty=settings.getfloat("rep-pen"),
+                repetition_penalty_range=settings.getint("rep-pen-range"),
+                repetition_penalty_slope=settings.getfloat("rep-pen-slope"),
             )
             break
         except OSError:
@@ -85,70 +68,6 @@ def get_generator():
             output("Model load cancelled. ", "error")
             exit(0)
     return generator
-
-def d20ify_speech(action, d):
-    adjectives_say_d01 = [
-        "mumble",
-        "prattle",
-        "incoherently say",
-        "whine",
-        "ramble",
-        "wheeze",
-    ]
-    adjectives_say_d20 = [
-        "successfully",
-        "persuasively",
-        "expertly",
-        "conclusively",
-        "dramatically",
-        "adroitly",
-        "aptly",
-    ]
-    if d == 1:
-        adjective = random.sample(adjectives_say_d01, 1)[0]
-        action = "You " + adjective + " " + action
-    elif d == 20:
-        adjective = random.sample(adjectives_say_d20, 1)[0]
-        action = "You " + adjective + " say " + action
-    else:
-        action = "You say " + action
-    return action
-
-
-def d20ify_action(action, d):
-    adjective_action_d01 = [
-        "disastrously",
-        "incompetently",
-        "dangerously",
-        "stupidly",
-        "horribly",
-        "miserably",
-        "sadly",
-    ]
-    adjective_action_d20 = [
-        "successfully",
-        "expertly",
-        "conclusively",
-        "adroitly",
-        "aptly",
-        "masterfully",
-    ]
-    if d == 1:
-        adjective = random.sample(adjective_action_d01, 1)[0]
-        action = "You " + adjective + " fail to " + action
-    elif d < 5:
-        action = "You attempt to " + action
-    elif d < 10:
-        action = "You try to " + action
-    elif d < 15:
-        action = "You start to " + action
-    elif d < 20:
-        action = "You " + action
-    else:
-        adjective = random.sample(adjective_action_d20, 1)[0]
-        action = "You " + adjective + " " + action
-    return action
-
 
 def settings_menu():
     all_settings = list(setting_info.keys())
@@ -339,20 +258,6 @@ def alter_text(text):
     return " ".join(sentences).strip()
 
 
-def print_intro():
-    print()
-
-    with open(Path("interface", "mainTitle.txt"), "r", encoding="utf-8") as file:
-        output(file.read(), "title", wrap=False, beg='')
-
-    with open(Path("interface", "subTitle.txt"), "r", encoding="utf-8") as file:
-        output(file.read(), "subtitle", wrap=False, beg='')
-
-    output(""
-           "",
-           'subsubtitle', end="\n\n")
-
-
 class GameManager:
 
     def __init__(self, gen: GPT2Generator):
@@ -367,7 +272,7 @@ class GameManager:
         self.story, self.context, self.prompt = None, None, None
         list_items(["Pick Prompt From File (Default if you type nothing)",
                     "Write Custom Prompt",
-                    "Load a Saved Conversation",
+                    "Load a Saved AI",
                     "Change Settings"],
                    'menu')
         new_game_option = input_number(3)
@@ -380,7 +285,7 @@ class GameManager:
                 return False
         elif new_game_option == 1:
             with open(
-                    Path("interface", "prompt-instructions.txt"), "r", encoding="utf-8"
+                    Path("interface/", "prompt-instructions.txt"), "r", encoding="utf-8"
             ) as file:
                 output(file.read(), "instructions", wrap=False)
             if use_ptoolkit():
@@ -410,7 +315,7 @@ class GameManager:
             return False
 
         if len((self.context + self.prompt).strip()) == 0:
-            output("Story has no prompt or context. Please enter a valid custom prompt. ", "error")
+            output("Conversation has no valid prompt or context, please enter a valid prompt and context. ", "error")
             return False
 
         if self.story is None:
@@ -423,12 +328,12 @@ class GameManager:
                     else:
                         break
             instructions()
-            output("Generating story...", "loading-message")
+            output("Generating conversation...", "loading-message")
             self.story = new_story(self.generator, self.context, self.prompt)
             self.story.savefile = auto_file
         else:
             instructions()
-            output("Loading story...", "loading-message")
+            output("Loading conversation...", "loading-message")
             self.story.print_story()
 
         if settings.getboolean("autosave"):
@@ -480,9 +385,9 @@ class GameManager:
             return True
 
         elif command == "restart":
-            output("Restarting AI...", "loading-message")
+            output("Restarting story...", "loading-message")
             if len((self.context + self.prompt).strip()) == 0:
-                output("Conversation has no prompt or context. Please enter a valid prompt. ", "error")
+                output("Story has no prompt or context. Please enter a valid prompt. ", "error")
                 return False
             self.story = new_story(self.generator, self.story.context, self.prompt)
 
@@ -497,14 +402,14 @@ class GameManager:
         elif command == "print":
             use_wrap = input_bool("Print with wrapping? (y/N): ", "query")
             use_color = input_bool("Print with colors? (y/N): ", "query")
-            output("Printing...", "message")
+            output("Printing story...", "message")
             self.story.print_story(wrap=use_wrap, color=use_color)
 
         elif command == "retry":
             if len(self.story.actions) < 2:
-                output("Restarting AI...", "loading-message")
+                output("Restarting story...", "loading-message")
                 if len((self.context + self.prompt).strip()) == 0:
-                    output("Conversation has no prompt or context. Please enter a valid prompt. ", "error")
+                    output("Story has no prompt or context. Please enter a valid prompt. ", "error")
                     return False
                 self.story = new_story(self.generator, self.story.context, self.prompt)
                 return False
@@ -548,6 +453,31 @@ class GameManager:
             else:
                 output("Please enter something valid to remember. ", "error")
 
+        elif command == "memalt":
+            while True:
+                output("Select a memory to alter: ", "menu")
+                list_items(self.story.memory + ["(Finish)"], "menu")
+                i = input_number(len(self.story.memory), default=-1)
+                if i == len(self.story.memory):
+                    break
+                else:
+                    self.story.memory[i] = alter_text(self.story.memory[i])
+                    if self.story.memory[i] == 0:
+                        del self.story.memory[i]
+
+        elif command == "memswap":
+            while True:
+                output("Select two memories to swap: ", "menu")
+                list_items(self.story.memory + ["(Finish)"], "menu")
+                i = input_number(len(self.story.memory), default=-1)
+                if i == len(self.story.memory):
+                    break
+                j = input_number(len(self.story.memory), default=-1)
+                if j == len(self.story.memory):
+                    break
+                else:
+                    self.story.memory[i], self.story.memory[j] = self.story.memory[j], self.story.memory[i]
+
         elif command == "forget":
             while True:
                 output("Select a memory to forget: ", "menu")
@@ -566,7 +496,7 @@ class GameManager:
             if story_file:
                 tstory, tcontext, tprompt = load_story(story_file, self.generator)
                 if tstory:
-                    output("Loading...", "message")
+                    output("Loading conversation...", "message")
                     self.story = tstory
                     self.context = tcontext
                     self.prompt = tprompt
@@ -620,44 +550,9 @@ class GameManager:
         if story_insert_regex:
             action = story_insert_regex.group(1)
             if not action or len(action.strip()) == 0:
-                output("Invalid text insert. ", "error")
+                output("Invalid conversation insert. ", "error")
                 return False
             output(format_result(action), "user-text")
-
-        # If the player enters a real action
-        elif action != "":
-            # Roll a die. We'll use it later if action-d20 is enabled.
-            d = random.randint(1, 20)
-            logger.debug("roll d20=%s", d)
-
-            # Add the "you" if it's not prompt-toolkit
-            if not use_ptoolkit():
-                action = re.sub("^(?: *you +)*(.+)$", "You \\1", action, flags=re.I)
-
-            sugg_action_regex = re.search(r"^(?: *you +)?([0-9]+)$", action, flags=re.I)
-            user_speech_regex = re.search(r"^(?: *you +say +)?([\"'].*[\"'])$", action, flags=re.I)
-            user_action_regex = re.search(r"^(?: *you +)(.+)$", action, flags=re.I)
-
-            if sugg_action_regex:
-                action = sugg_action_regex.group(1)
-                if action in [str(i) for i in range(len(suggested_actions))]:
-                    action = "You " + suggested_actions[int(action)].strip()
-
-            if user_speech_regex:
-                action = user_speech_regex.group(1)
-                if settings.getboolean("action-d20"):
-                    action = d20ify_speech(action, d)
-                else:
-                    action = "You say " + action
-                action = end_sentence(action)
-
-            elif user_action_regex:
-                action = first_to_second_person(user_action_regex.group(1))
-                if settings.getboolean("action-d20"):
-                    action = d20ify_action(action, d)
-                else:
-                    action = "You " + action
-                action = end_sentence(action)
 
             # If the user enters nothing but leaves "you", treat it like an empty action (continue)
             if re.match(r"^(?: *you *)*[.?!]? *$", action, flags=re.I):
@@ -670,10 +565,16 @@ class GameManager:
             output("Continuing...", "message")
 
         result = self.story.act(action)
- 
+
+        # Check for loops
+        if self.story.is_looping():
+            self.story.revert()
+            output("That action caused the model to start looping. Try something else instead. ",
+                   "error")
+
         # Output the AI's result.
         output(result, "ai-text")
-        
+
     def play_story(self):
         """The main in-game loop"""
         if not self.init_story():  # Failed init
@@ -700,9 +601,9 @@ class GameManager:
             print()
 
             if use_ptoolkit():
-                action = input_line("> ", "main-prompt", default="%s" % "Me: ")
+                action = input_line("> ", "main-prompt", default="%s" % "")
             else:
-                action = input_line(">You ", "main-prompt")
+                action = input_line(">", "main-prompt")
 
             # Clear suggestions and user input
             if act_alts and not in_colab():
@@ -724,32 +625,3 @@ class GameManager:
             # Autosave after every input from the user (if it's enabled)
             if settings.getboolean("autosave"):
                 save_story(self.story, file_override=self.story.savefile, autosave=True)
-
-
-# This is here for rapid development, without reloading the model. You import play into a jupyternotebook with autoreload
-if __name__ == "__main__":
-    with open(Path("interface", "clover"), "r", encoding="utf-8") as file_:
-        print(file_.read())
-    try:
-        gm = GameManager(get_generator())
-        while True:
-            # May be needed to avoid out of mem
-            gc.collect()
-            torch.cuda.empty_cache()
-            print_intro()
-            gm.play_story()
-    except KeyboardInterrupt:
-        output("Quitting", "message")
-        if gm and gm.story:
-            if input_bool("Do you want to save? (y/N): ", "query"):
-                save_story(gm.story)
-    except Exception:
-        traceback.print_exc()
-        output("A fatal error has occurred. ", "error")
-        if gm and gm.story:
-            if not gm.story.savefile or len(gm.story.savefile.strip()) == 0:
-                savefile = datetime.now().strftime("crashes/%d-%m-%Y_%H%M%S")
-            else:
-                savefile = gm.story.savefile
-            save_story(gm.story, file_override=savefile)
-        exit(1)

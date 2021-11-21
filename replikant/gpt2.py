@@ -1,8 +1,8 @@
 import math
 
 import torch
-from transformers.configuration_gpt2 import GPT2Config
-from transformers.modeling_gpt2 import GPT2PreTrainedModel
+from transformers import GPT2Config
+from transformers import GPT2PreTrainedModel
 
 
 
