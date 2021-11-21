@@ -1,9 +1,9 @@
-torch
-transformers==2.3.0
+torch==1.8.1
+transformers
 gsutil
 numpy
 pyyaml
 regex
-tensorflow==1.14.0
+tensorflow
 tracery
 prompt_toolkit
