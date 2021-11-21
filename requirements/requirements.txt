@@ -1,2 +1,0 @@
-prompt_toolkit
-https://github.com/finetuneanon/transformers/archive/refs/heads/gpt-neo-dungeon-localattention1.zip
