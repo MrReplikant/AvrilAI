@@ -315,7 +315,6 @@ class GPT2Generator:
         first_letter_capitalized = result[0].isupper()
         result = result.replace('."', '".')
         result = result.replace("#", "")
-        result = result.replace("*", "")
         # TODO look at this I think blank lines should be fine or blacklisted at generation time
         result = result.replace("\n\n", "\n")
         # result = first_to_second_person(result)
