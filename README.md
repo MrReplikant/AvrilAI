@@ -64,7 +64,7 @@ When that is complete, run "pip3 install -r requirements.txt"
 
 once everything has been completed, you should be good to go! 
 
-to run the program, run "python3 play.py"
+to run the program, run "python3 launch.py"
 
 # Instructions for Windows 10 (64 bit edition only):
 
@@ -100,7 +100,7 @@ bring everything up in the command prompt.
 
 Next, type "pip install -r requirements .txt". This will install everything needed to run the program. 
 
-DONE! Now, all you need to do is run "python play.py", and the program should launch! 
+DONE! Now, all you need to do is run "python launch.py", and the program should launch! 
 
 # IMPORTANT - PLEASE READ!
 
