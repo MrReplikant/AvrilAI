@@ -27,7 +27,7 @@ AvrilAI is based upon the code of an older version of Cloveranon's AIDungeon: Cl
 
 With the aforementioned in mind, I would like to thank Cloveranon for the creation of their AI Dungeon fork, and MikkoMMM for their code allowing for sentence generation control. Without either of these things, this project simply wouldn't be possible!  
 
-# Installation Instructions for AvrilAI v1.0
+# Installation Instructions for AvrilAI v1.4
 
 ---IMPORTANT--- 
 this file:  https://mega.nz/file/CQtmnRaS#Y9vigJmTZAoiND-WJNSvLNJE6kr1z2ZPLfM0mEL36QE should be placed at: AvrilAI/models/ReplikantModel (it is too heavy to put in git)
