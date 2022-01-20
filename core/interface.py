@@ -6,8 +6,8 @@ def boolValue(bool):
 
 def instructions():
     print('\n' +
-          'Project Replikant Instructions: \n' +
-          '  To do roleplay, use {thing you want to do goes here} followed by a period.\n' +
+          'AvrilAI Instructions: \n' +
+          '  To do roleplay, use *thing you want to do goes here* followed by any other dialogue text and a period.\n' +
           '  To speak to the AI, just talk to it as if you were texting someone!\n')
     print('The following commands can be entered for any action:')
     print('  "/revert"                Reverts the last action, allowing you to try a different one.')
