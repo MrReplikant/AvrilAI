@@ -1,9 +1,24 @@
 @echo off
-set PY="%CD%\venv\python.exe"
+cd /D %~dp0
+TITLE AvrilAI
+SET /P M=<loader.settings
+IF %M%==1 GOTO drivemap
+IF %M%==2 GOTO subfolder
 
-for %%X in (wt.exe) do (set FOUNDWT=%%~$PATH:X)
-if not defined FOUNDWT (
-    start "AIDungeon2 Clover Edition" %PY% launch.py
-) else (
-    wt.exe --title "AIDungeon2 Clover Edition" -d "%~dp0/" -p "Windows PowerShell" %PY% launch.py
-)
+:subfolder
+ECHO Runtime launching in subfolder mode
+SET TEMP=%~DP0MINICONDA3
+SET TMP=%~DP0MINICONDA3
+call miniconda3\condabin\activate
+python launch.py %*
+cmd /k
+
+:drivemap
+ECHO Runtime launching in A: drive mode
+subst A: miniconda3 >nul
+SET TEMP=A:\
+SET TMP=A:\
+call A:\python\condabin\activate
+python launch.py %*
+subst A: /D
+cmd /k
