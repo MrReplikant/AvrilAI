@@ -1,0 +1,14 @@
+name: avrilai
+channels:
+  - huggingface
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - pytorch
+  - python=3.8.*
+  - cudatoolkit=11.1
+  - transformers
+  - pip
+  - git
+  - prompt_toolkit
