@@ -1,0 +1,8 @@
+gsutil
+numpy
+pyyaml
+regex
+tensorflow-aarch64
+tracery
+prompt_toolkit
+https://github.com/KumaTea/pytorch-aarch64/releases/download/v1.10.0/torch-1.10.0-cp39-cp39-linux_aarch64.whl
