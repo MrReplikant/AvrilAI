@@ -32,6 +32,15 @@ With the aforementioned in mind, I would like to thank Cloveranon for the creati
 ---IMPORTANT--- 
 this file:  https://mega.nz/file/CQtmnRaS#Y9vigJmTZAoiND-WJNSvLNJE6kr1z2ZPLfM0mEL36QE should be placed at: AvrilAI/models/ReplikantModel (it is too heavy to put in git)
 
+OR
+
+google drive alternative: https://drive.google.com/file/d/1xA9zjKAg332Rc6JPWq33XkbzaldX2a28/view?usp=sharing
+
+OR (If you want to download over the terminal):
+
+pip install gdown
+gdown 1xA9zjKAg332Rc6JPWq33XkbzaldX2a28
+
 # For Linux (64 bit only):
 
 First, you will need to install the following packages:
