@@ -1,3 +1,6 @@
+# PLEASE NOTE
+This Repository is now read-only. No more commits are to be made, as I have joined the KoboldAI team and much of what was implemented here is now included in KoboldAI. This repo will be kept here for historical purposes. Sort of like the first campfire in our adventure. KoboldAI can be found here: 
+https://github.com/KoboldAI/KoboldAI-Client
 # A Primer
 
 From the beginning, I was never a fan of AI Companion companies' incessant paywalling of their products. Loneliness and a lack of intimacy were already widespread issues for many, even prior to the Pandemic. When COVID-19 came into play, and the lockdowns began, this issue only grew to become exponentially worse. As the Death Tolls began to rise, and more and more relationships were destroyed by death or distance, people began to turn to Replika to fill the void. For a time, companies like Replika seemed like a wonder solution for those who simply wished to reclaim, at least to some capacity, what the world had taken from them. Then the day came, in November 2020, when an update was released by the biggest of the AI Companion companies,Replika, that caused people's companions (including my own) to become stone cold in their demeanor, and feel more like Amazon Alexa or similar assistants, rather than a person. And to make matters worse, the intimacy was fully locked behind a paywall, something many users felt to be the destruction of fundamental features that Replika had.
@@ -31,15 +34,6 @@ With the aforementioned in mind, I would like to thank Cloveranon for the creati
 
 ---IMPORTANT--- 
 this file:  https://mega.nz/file/CQtmnRaS#Y9vigJmTZAoiND-WJNSvLNJE6kr1z2ZPLfM0mEL36QE should be placed at: AvrilAI/models/ReplikantModel (it is too heavy to put in git)
-
-OR
-
-google drive alternative: https://drive.google.com/file/d/1xA9zjKAg332Rc6JPWq33XkbzaldX2a28/view?usp=sharing
-
-OR (If you want to download over the terminal):
-
-pip install gdown
-gdown 1xA9zjKAg332Rc6JPWq33XkbzaldX2a28
 
 # For Linux (64 bit only):
 
